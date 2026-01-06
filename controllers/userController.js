@@ -1,17 +1,41 @@
-// @desc    Get all users
-// @route   GET /api/users
-const getUsers = (req, res) => {
-    // We are just sending a text message for now.
-    // In Week 2, we will fetch real data from the database here.
-    res.status(200).json({ message: "Get all users" });
+const User = require('../models/userModel');
+
+const registerUser = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+
+        const user = await User.create({
+            name,
+            email,
+            password
+        });
+
+        if (user) {
+            res.status(201).json({
+                _id: user.id,
+                name: user.name,
+                email: user.email
+            });
+        } else {
+            res.status(400).json({ message: 'Invalid user data' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 
-// @desc    Register a user
-// @route   POST /api/users
-const registerUser = (req, res) => {
-    // Logic to register user will go here later
-    res.status(200).json({ message: "Register new user" });
+const getUsers = async (req, res) => {
+    try {
+        const users = await User.find(); 
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 
-// We export these functions so other files can use them
 module.exports = { getUsers, registerUser };
