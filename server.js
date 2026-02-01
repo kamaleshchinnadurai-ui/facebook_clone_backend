@@ -1,26 +1,22 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const cors = require('cors');
+const cors = require('cors'); // Ideally remove this if you aren't using it yet, but it's fine to keep
+const connectDB = require('./config/db');
 
 dotenv.config();
-
-const connectDB = require('./config/db');
 
 connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+// We changed this to 8000 earlier to avoid AirPlay conflicts
+const PORT = process.env.PORT || 8000; 
 
 app.use(express.json());
-app.use(cors());
+app.use(express.urlencoded({ extended: false }));
 
-const userRoutes = require('./routes/userRoutes');
-
-app.use('/api/users', userRoutes);
-
-app.get('/', (req, res) => {
-  res.send('API is running...');
-});
+// --- ROUTES ---
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/posts', require('./routes/postRoutes')); // <--- THIS WAS MISSING!
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
