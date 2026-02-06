@@ -1,23 +1,29 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors'); // Ideally remove this if you aren't using it yet, but it's fine to keep
-const connectDB = require('./config/db');
+const express = require('express')
+const dotenv = require('dotenv').config()
+const cors = require('cors')
+const { errorHandler } = require('./middleware/errorMiddleware')
+const connectDB = require('./config/db')
+const port = process.env.PORT || 8000
 
-dotenv.config();
+// Connect to database
+connectDB()
 
-connectDB();
+const app = express()
 
-const app = express();
-// We changed this to 8000 earlier to avoid AirPlay conflicts
-const PORT = process.env.PORT || 8000; 
+// 🛡️ FIX: Explicitly allow requests from ANYWHERE
+app.use(cors({
+  origin: '*', 
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
-// --- ROUTES ---
-app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/posts', require('./routes/postRoutes')); // <--- THIS WAS MISSING!
+app.use('/api/posts', require('./routes/postRoutes'))
+app.use('/api/users', require('./routes/userRoutes'))
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.use(errorHandler)
+
+app.listen(port, () => console.log(`Server started on port ${port}`))

@@ -1,14 +1,17 @@
-const express = require('express');
-const router = express.Router();
-const { registerUser, loginUser, getMe, getUsers } = require('../controllers/userController'); // Added getMe
-const { protect } = require('../middleware/authMiddleware'); // Added protect middleware
+const express = require('express')
+const router = express.Router()
+const {
+  registerUser,
+  loginUser,
+  getMe,
+} = require('../controllers/userController')
+const { protect } = require('../middleware/authMiddleware')
 
 // Public Routes
-router.post('/', registerUser);
-router.get('/', getUsers);
-router.post('/login', loginUser);
+router.post('/', registerUser)
+router.post('/login', loginUser)
 
-// Protected Route (This was missing!)
-router.get('/me', protect, getMe);
+// Private Routes
+router.get('/me', protect, getMe)
 
-module.exports = router;
+module.exports = router

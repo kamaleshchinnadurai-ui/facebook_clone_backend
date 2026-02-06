@@ -21,9 +21,10 @@ function Dashboard() {
 
     if (!user) {
       navigate('/login')
+    } else {
+      // Only dispatch if user exists
+      dispatch(getPosts())
     }
-
-    dispatch(getPosts())
 
     return () => {
       dispatch(reset())

@@ -19,7 +19,7 @@ function App() {
           </Routes>
         </div>
       </Router>
-      <ToastContainer />
+   {/* <ToastContainer />  <-- COMMENT THIS OUT TEMPORARILY */}
     </>
   )
 }

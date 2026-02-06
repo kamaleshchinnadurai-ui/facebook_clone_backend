@@ -4,6 +4,9 @@ import './index.css';
 import App from './App';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
+// 👇 This is the specific fix that allows buttons to be clickable
+// while still showing nice error messages.
+import 'react-toastify/dist/ReactToastify.css'; 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
