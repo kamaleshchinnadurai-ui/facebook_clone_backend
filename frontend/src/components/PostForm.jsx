@@ -4,12 +4,10 @@ import { createPost } from '../features/posts/postSlice'
 
 function PostForm() {
   const [text, setText] = useState('')
-
   const dispatch = useDispatch()
 
   const onSubmit = (e) => {
     e.preventDefault()
-
     dispatch(createPost({ text }))
     setText('')
   }
@@ -18,7 +16,7 @@ function PostForm() {
     <section className='form'>
       <form onSubmit={onSubmit}>
         <div className='form-group'>
-          <label htmlFor='text'>Post Something</label>
+          <label htmlFor='text'>What's on your mind?</label>
           <input
             type='text'
             name='text'

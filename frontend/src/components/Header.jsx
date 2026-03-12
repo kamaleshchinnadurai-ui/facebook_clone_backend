@@ -1,4 +1,4 @@
-import { FaSignInAlt, FaSignOutAlt, FaUser } from 'react-icons/fa'
+import { FaSignInAlt, FaSignOutAlt, FaUser, FaSearch, FaBell } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout, reset } from '../features/auth/authSlice'
@@ -17,27 +17,35 @@ function Header() {
   return (
     <header className='header'>
       <div className='logo'>
-        <Link to='/'>SocialApp</Link>
+        <Link to='/'>Facebook Clone</Link>
       </div>
       <ul>
         {user ? (
-          <li>
-            <button className='btn' onClick={onLogout}>
-              <FaSignOutAlt /> Logout
-            </button>
-          </li>
-        ) : (
           <>
             <li>
-              <Link to='/login'>
-                <FaSignInAlt /> Login
+              <Link to='/search'><FaSearch /> Search</Link>
+            </li>
+            <li>
+              <Link to='/notifications' style={{ position: 'relative' }}>
+                <FaBell /> Notifications
+                {user.friendRequests?.length > 0 && (
+                  <span className='badge'>{user.friendRequests.length}</span>
+                )}
               </Link>
             </li>
             <li>
-              <Link to='/register'>
-                <FaUser /> Register
-              </Link>
+              <Link to='/profile'><FaUser /> Profile</Link>
             </li>
+            <li>
+              <button className='btn' onClick={onLogout}>
+                <FaSignOutAlt /> Logout
+              </button>
+            </li>
+          </>
+        ) : (
+          <>
+            <li><Link to='/login'><FaSignInAlt /> Login</Link></li>
+            <li><Link to='/register'><FaUser /> Register</Link></li>
           </>
         )}
       </ul>

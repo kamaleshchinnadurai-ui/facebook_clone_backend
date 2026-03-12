@@ -30,25 +30,50 @@ export const register = createAsyncThunk(
   }
 )
 
-// Login user (THIS WAS MISSING)
-export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
-  try {
-    return await authService.login(user)
-  } catch (error) {
-    const message =
-      (error.response &&
-        error.response.data &&
-        error.response.data.message) ||
-      error.message ||
-      error.toString()
-    return thunkAPI.rejectWithValue(message)
+// Login user
+export const login = createAsyncThunk(
+  'auth/login',
+  async (user, thunkAPI) => {
+    try {
+      return await authService.login(user)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
   }
-})
+)
 
 // Logout user
 export const logout = createAsyncThunk('auth/logout', async () => {
   await authService.logout()
 })
+
+// Update Profile
+export const updateProfile = createAsyncThunk(
+  'auth/updateProfile',
+  async (userData, thunkAPI) => {
+    try {
+      // 👇 THE FIX: Grab the token from the logged-in user state
+      const token = thunkAPI.getState().auth.user.token
+      
+      // Pass both the form data and the token to the service
+      return await authService.updateProfile(userData, token)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -93,6 +118,20 @@ export const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        // 👇 Overwrite the old user data with the new picture and location
+        state.user = action.payload 
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
       })
   },
 })

@@ -18,9 +18,7 @@ export const createPost = createAsyncThunk(
       return await postService.createPost(postData, token)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
+        (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString()
       return thunkAPI.rejectWithValue(message)
@@ -37,9 +35,7 @@ export const getPosts = createAsyncThunk(
       return await postService.getPosts(token)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
+        (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString()
       return thunkAPI.rejectWithValue(message)
@@ -56,9 +52,7 @@ export const deletePost = createAsyncThunk(
       return await postService.deletePost(id, token)
     } catch (error) {
       const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
+        (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString()
       return thunkAPI.rejectWithValue(message)
@@ -106,9 +100,7 @@ export const postSlice = createSlice({
       .addCase(deletePost.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.posts = state.posts.filter(
-          (post) => post._id !== action.payload.id
-        )
+        state.posts = state.posts.filter((post) => post._id !== action.payload.id)
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.isLoading = false

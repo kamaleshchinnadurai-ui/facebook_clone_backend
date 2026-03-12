@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import Spinner from '../components/Spinner'
 import PostForm from '../components/PostForm'
-import PostItem from '../components/PostItem'
 import { getPosts, reset } from '../features/posts/postSlice'
 
 function Dashboard() {
@@ -22,17 +22,17 @@ function Dashboard() {
     if (!user) {
       navigate('/login')
     } else {
-      // Only dispatch if user exists
       dispatch(getPosts())
     }
 
+    // This cleanup function clears the posts when you leave the dashboard
     return () => {
       dispatch(reset())
     }
-  }, [user, navigate, isError, message, dispatch])
+  }, [user, navigate, dispatch]) // 👇 FIXED: Removed isError and message so the loop is dead!
 
   if (isLoading) {
-    return <h1>Loading...</h1>
+    return <Spinner />
   }
 
   return (
@@ -45,14 +45,16 @@ function Dashboard() {
       <PostForm />
 
       <section className='content'>
-        {posts.length > 0 ? (
-          <div className='posts'>
+        {posts && posts.length > 0 ? (
+          <div className='goals'>
             {posts.map((post) => (
-              <PostItem key={post._id} post={post} />
+              <div key={post._id} className="goal">
+                {post.text}
+              </div>
             ))}
           </div>
         ) : (
-          <h3>You have not set any posts</h3>
+          <h3>You have not created any posts yet</h3>
         )}
       </section>
     </>

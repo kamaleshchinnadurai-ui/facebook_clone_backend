@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from '../features/auth/authSlice'
-import postReducer from '../features/posts/postSlice' // <--- Add this
+import postReducer from '../features/posts/postSlice'
+import notificationReducer from '../features/notifications/notificationSlice' // 👇 NEW
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    posts: postReducer, // <--- Add this
+    posts: postReducer,
+    notifications: notificationReducer, // 👇 NEW
   },
 })

@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = 'https://facebook-clone-backend-1pm4.onrender.com/api/posts/'
+// 👇 THE FIX: The exact, correct URL to your backend
+const API_URL = 'http://localhost:8000/api/posts/'
 
 // Create new post
 const createPost = async (postData, token) => {
