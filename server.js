@@ -6,6 +6,7 @@ const { errorHandler } = require('./middleware/errorMiddleware')
 const connectDB = require('./config/db')
 const port = process.env.PORT || 8000
 const cors = require('cors')
+const { loadModel } = require('./toxicityFilter');
 
 connectDB()
 
@@ -46,5 +47,5 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use(errorHandler)
-
+loadModel();
 app.listen(port, () => console.log(`Server started on port ${port}`))
